@@ -38,7 +38,7 @@ updates = []
 
 @sio.on('connect')
 def on_connect():
-	global dhe_helper, x, Alice_server, pkey_server, credentials
+	global dhe_helper, x, credentials
 
 	#diffie hellman keys between each pair of participating clients
 	#more info on pyDHE module - https://github.com/deadPix3l/pyDHE
