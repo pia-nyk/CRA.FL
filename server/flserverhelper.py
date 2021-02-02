@@ -3,7 +3,7 @@ import numpy as np
 import json
 import pyDHE
 
-class FLServer:
+class FLServerHelper:
 	encrypted_suvs_clientwise = {}
 	def __init__(self):
 		print("fl_server object made")
@@ -12,6 +12,7 @@ class FLServer:
 		parameters = "parameters"
 		return parameters
 
+	#reset the encrypted suvs dict
 	def deleteVal(self):
 		self.encrypted_suvs_clientwise = {}
 
@@ -23,39 +24,34 @@ class FLServer:
 			model_weights.append(np.array(i,dtype=np.float32))
 		return model_weights
 
+	#average the received updates
 	def averaging(self, updates, count_clients):
 		for key, value in updates.items():
-			updates[key] = self.weights_from_json(value)
+			updates[key] = self.weights_from_json(value) #convert back from json
 		sum_updates = []
+		#initializing
 		for key, value in updates.items():
 			for item in value:
 				sum_updates.append(np.zeros_like(item))
 			break
-
+		#add all received updates from updates dict
 		for key, value in updates.items():
 			for i in range(0, len(value)):
 				sum_updates[i] = np.add(sum_updates[i], value[i])
-
+		#average the summed updates
 		for i in range(0, len(sum_updates)):
 			sum_updates[i] = sum_updates[i] / count_clients
-
-		print("PRINTING SUM UPDATES:")
-		print(sum_updates)
-		#print("ENCRYPTED SUVS CLIENTWISE")
-		#print(self.encrypted_suvs_clientwise)
+		#delete old suvs
 		self.deleteVal()
 		return sum_updates
 
-
+	#each entry in dict holds the suv dict created by one client for others
+	#reorder it for the server to send suvs from all clients for each client
 	def perturb_util1(self, dict):
-		#print("DICTIONARY PRINTING:")
-		#print(dict)
 		for key, value in dict.items():
 			self.encrypted_suvs_clientwise[key] = {}
 		for key, value in dict.items():
 			for key_in, value_in in value.items():
 				if(key != key_in):
 					self.encrypted_suvs_clientwise[key_in][key] = value_in
-		#print("ENCRYPTED SUVS CLIENTWISE:")
-		#print(self.encrypted_suvs_clientwise)
 		return self.encrypted_suvs_clientwise

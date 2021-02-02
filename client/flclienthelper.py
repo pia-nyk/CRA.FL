@@ -5,22 +5,22 @@ from  numpy import array
 import pandas as pd
 import json
 
-DATA_FILE_X = "../data/xtrain.csv"
-DATA_FILE_Y = "../data/ytrain.csv"
+DATA_FILE_X = "../input/xtrain.csv"
+DATA_FILE_Y = "../input/ytrain.csv"
 EPOCHS = 5
 BATCH_SIZE = 5000
 
-class FLClient:
+class FLClientHelper:
 
 	def __init__(self):
-		print(" fl_client object made ")
+		#initializing params
 		self.model = None
 		self.current_model_version = 0
-		# data = np.loadtxt(DATA_FILE, delimiter=",")
 		self.X = pd.read_csv(DATA_FILE_X)
 		self.Y = pd.read_csv(DATA_FILE_Y)
 		self.updates  = []
 
+	#extract weights from server model and set those to current local model
 	def weights_from_json(self,model_weights_json):
 		json_load = json.loads(model_weights_json)
 		model_weights_list = np.array(json_load)
@@ -29,37 +29,27 @@ class FLClient:
 			model_weights.append(np.array(i,dtype=np.float32))
 		return model_weights
 
-
-
-	def set_model(self, model):
-		print( " setting model " )
+	#process and store model data received from server
+	def preprocess_data(self, data):
+		dict = json.loads(model_json)
+		model = model_from_json(json.dumps(dict["structure"]))
 		self.model = model
-
-
-
-	def set_weights(self, model_weights):
-		print(" updating model weights ")
+		model_weights = fl_client.weights_from_json(json.dumps(dict["weights"]))
 		self.model.set_weights(model_weights)
 
+	#training process
 	def train_model(self,model_weights):
 		print(" start training ")
 		self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 		self.model.fit(self.X, self.Y, epochs=EPOCHS, batch_size=BATCH_SIZE)
-		#self.updates_json = self.get_updates_json(model_weights)
 		self.updates = self.get_updates(model_weights)
-
-		'''for item in self.updates:
-			print("ITEM")
-			print(item.shape)
-			self.dimension.append((item.shape[0],item.shape[1]))'''
 		print(" end training ")
 		return self.updates
 
+	#get the model updates after training wrt to weights received from server
 	def get_updates(self, model_weights):
 		print(self.model.get_weights())
 		print(model_weights)
 		updates =  [(i-j) for (i,j) in zip(self.model.get_weights(),model_weights)]
 		print("PRINTING UPDATES:")
-		print(updates)
 		return updates
-		#return pd.Series(updates).to_json(orient='values')

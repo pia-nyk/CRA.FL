@@ -1,2 +1,3 @@
-data/xtrain.csv
-data/ytrain.csv
+input/xtrain.csv
+input/ytrain.csv
+models/model.h5
