@@ -43,3 +43,8 @@ After each iteration, model at server was tested on testing data. The accuracy f
     <td> 78.29 </td>
   </tr>
 </table>
+
+<br /><br /> 
+<a href="https://github.com/pia-nyk/credit-risk-assessment-fl/blob/master/extra_materials/BlackBookFederatedLearning.pdf"> 
+<b> For futher information on the project, pls refer this </b> </a>
+
