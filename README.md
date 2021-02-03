@@ -7,7 +7,7 @@ The lending institutions are at a constant risk from defaulting customers. Altho
 <br/><br/>
 <b> Proposed System Architecture </b> <br/>
 The system consists of a central authority server like RBI. The other participating clients simulate financial institutions disbursing loans. Scope of projects requires all systems to be connected to the same network. Multithread connection ensures connection between servers and clients remain intact even during the federated learning process. <br/>
-<img src="https://github.com/pia-nyk/credit-risk-assessment-fl/blob/master/extra_materials/server_architecture.png" width="400" height="400">
+<img src="https://github.com/pia-nyk/credit-risk-assessment-fl/blob/master/extra_materials/server_architecture.png" width="500" height="400">
 
 <br/><br/>
 <b> Data </b><br/>
