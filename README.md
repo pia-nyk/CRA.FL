@@ -39,7 +39,7 @@ After each iteration, model at server was tested on testing data. The accuracy f
     <td> 78.52 </td>
   </tr>
   <tr>
-    <td> with Differential privacy </td>
+    <td> FL with Differential privacy </td>
     <td> 78.29 </td>
   </tr>
 </table>
